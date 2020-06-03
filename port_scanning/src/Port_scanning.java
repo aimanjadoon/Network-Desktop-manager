@@ -27,7 +27,11 @@ public class Port_scanning extends Frame implements ActionListener, Runnable
 	{
 		super("Port Scanner 1.0");
 		setBackground(new Color(192, 192, 192));
-		setLocation(200, 200);
+		setLocation(400, 200);
+                setPreferredSize(new Dimension(600, 500));
+                
+                setVisible(true);
+		
 		gbc = new GridBagConstraints();
 		setLayout(new GridBagLayout());
 

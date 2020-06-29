@@ -171,7 +171,11 @@ public class Client extends javax.swing.JFrame {
             chatArea.append("\n Unable to Send Message");
         }
     }
-  
+  public static void main(String[] args) 
+    {
+        Client client=new Client("127.0.0.1");
+        client.startRunning();
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea chatArea;

@@ -163,7 +163,11 @@ public class MainServer extends javax.swing.JFrame {
             chatArea.append("\n Unable to Send Message");
         }
     }
-
+	public static void main(String[] args) {
+		    
+		MainServer myServer=new MainServer();
+                myServer.startRunning();
+	}
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea chatArea;

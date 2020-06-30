@@ -1,6 +1,9 @@
 
+
 package src;
 
+import Lockandunlock.lockeandunlocker;
+import lockerandunlocker.*;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -14,15 +17,28 @@ import java.net.UnknownHostException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
- import java.awt.Desktop;
-import java.io.File;
+import java.awt.event.InputEvent;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import port_scanning.*;
+import lockandunlock.*;
+import MessagingClient_1.*;
+import Messaging_Server.*;
+
+
+
+
+
+
+
+
 
 public class Home extends javax.swing.JFrame {
-
+int x;
+int y;
    
 
        public Home() {
@@ -36,7 +52,7 @@ public class Home extends javax.swing.JFrame {
         setLocation(width / 2 - getWidth() / 2 , height / 2 - getHeight() / 2);
     }
        @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -110,8 +126,18 @@ public class Home extends javax.swing.JFrame {
         });
 
         jButton4.setText("Port scanning");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Folders locking/ unlocking");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -198,10 +224,10 @@ public class Home extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
     boolean isStartStream = false;
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         if(isStart){
             JOptionPane.showMessageDialog(this, "If you want to ask to share screen, you must stop your server.");
             return;
@@ -217,7 +243,7 @@ public class Home extends javax.swing.JFrame {
                     public void run() {
                         try {
                             while (isStartStream) {
-                                Socket soc = new Socket(ip, 1010);
+                                Socket soc = new Socket(ip, 1011);
                                 BufferedImage img = ImageIO.read(soc.getInputStream());
                                 jPanel2.getGraphics().drawImage(img, 0, 0, jPanel2.getWidth(), jPanel2.getHeight(), null);
                                 soc.close();
@@ -242,10 +268,10 @@ public class Home extends javax.swing.JFrame {
         } else {
             isStartStream = false;
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }                                          
 
     boolean isStart = false;
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {                                           
        JTextArea textarea =new JTextArea();
         if(isStartStream){
             JOptionPane.showMessageDialog(this, "If you want to start a server. You must stop watching other's screen.");
@@ -260,13 +286,14 @@ public class Home extends javax.swing.JFrame {
                         Robot rob = new Robot();
                         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
                         while (isStart) {
-                            ServerSocket soc = new ServerSocket(1010);
+                            ServerSocket soc = new ServerSocket(1011);
                             Socket so = soc.accept();
                             BufferedImage img = rob.createScreenCapture(new Rectangle(0, 0, (int) d.getWidth(), (int) d.getHeight()));
-
+                                        
                             ByteArrayOutputStream ous = new ByteArrayOutputStream();
                             ImageIO.write(img, "png", ous);
                             so.getOutputStream().write(ous.toByteArray());
+                            new ReceiveEvents(so,rob);
                             soc.close();
                             try {
                                 Thread.sleep(10);
@@ -291,7 +318,7 @@ public class Home extends javax.swing.JFrame {
           String add= ip.toString();
             System.out.println("Your current IP address : " + ip);
             System.out.println("Your current Hostname : " + hostname);
-            System.out.println("ip in string is" +add);
+            System.out.println("ip in string is=" +add);
             
  
         } catch (UnknownHostException e) {
@@ -304,11 +331,11 @@ public class Home extends javax.swing.JFrame {
         } else {
             isStart = false;
         }
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }                                          
 
     
     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
      InetAddress ip;
         String hostname = null;
         try {
@@ -353,14 +380,28 @@ public class Home extends javax.swing.JFrame {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                        
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:msg module
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+         
+         MainServer main= new MainServer();
         
-    }//GEN-LAST:event_jButton3ActionPerformed
+         
+         String[] args = {};
+                   MainServer.main(args);
+         
+        // ServerTest.MainServer ms= st.new MainServer();
+         
+    
+    
+   
+    // TODO add your handling code here:msg module
+        
+        
+        
+    }                                        
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         
         jPanel1.removeAll();
         jPanel1.repaint();
@@ -371,12 +412,33 @@ public class Home extends javax.swing.JFrame {
         jPanel1.revalidate();
         
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                        
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                         
       
         this.dispose();// TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }                                        
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        Port_scanning ps= new Port_scanning();
+        String[] args = {};
+        Port_scanning.main(args);
+        
+        
+        // TODO add your handling code here:
+    }                                        
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        lockeandunlocker lc= new lockeandunlocker();
+        String[] args = {};
+        lockeandunlocker.main(args);
+        
+        new Home().setVisible(true);
+        
+        // TODO add your handling code here:
+    }                                        
 
     
     
@@ -389,7 +451,6 @@ public class Home extends javax.swing.JFrame {
     
     public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
-        
         
         
         try {
@@ -421,7 +482,7 @@ public class Home extends javax.swing.JFrame {
        
     
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -436,8 +497,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    // End of variables declaration//GEN-END:variables
-	class ReceiveEvents extends Thread{
+    // End of variables declaration                   
+
+    class ReceiveEvents extends Thread{
 			Socket socket= null;
 			Robot robot = null;
 			boolean continueLoop = true;
